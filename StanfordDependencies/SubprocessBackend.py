@@ -18,7 +18,8 @@ from .StanfordDependencies import (StanfordDependencies,
                                    JavaRuntimeVersionError)
 from .CoNLL import Corpus
 
-JAVA_CLASS_NAME = 'edu.stanford.nlp.trees.EnglishGrammaticalStructure'
+# JAVA_CLASS_NAME = 'edu.stanford.nlp.trees.EnglishGrammaticalStructure'
+JAVA_CLASS_NAME = 'edu.stanford.nlp.trees.ud.UniversalDependenciesConverter'
 
 class SubprocessBackend(StanfordDependencies):
     """Interface to Stanford Dependencies via subprocesses. This means
@@ -65,10 +66,12 @@ class SubprocessBackend(StanfordDependencies):
                        '-treeFile', input_file.name]
             # if we're including erased, we want to include punctuation
             # since otherwise we won't know what SD considers punctuation
+            """
             if include_punct or include_erased:
                 command.append('-keepPunct')
             if not universal:
                 command.append('-originalDependencies')
+            """
             if debug:
                 print('Command:', ' '.join(command))
             sd_process = subprocess.Popen(command, stdout=subprocess.PIPE,
@@ -88,10 +91,13 @@ class SubprocessBackend(StanfordDependencies):
             os.remove(input_file.name)
 
         try:
+            """
             sentences = Corpus.from_stanford_dependencies(stdout.splitlines(),
                                                           ptb_trees,
                                                           include_erased,
                                                           include_punct)
+            """
+            sentences = Corpus.from_conll(stdout.splitlines())
             for sentence, ptb_tree in zip(sentences, ptb_trees):
                 if len(sentence) == 0:
                     raise ValueError("Invalid PTB tree: %r" % ptb_tree)

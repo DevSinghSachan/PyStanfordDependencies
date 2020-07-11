@@ -180,8 +180,8 @@ class StanfordDependencies:
         if not isinstance(jar_filename, string_type):
             raise TypeError("jar_filename is not a string: %r" % jar_filename)
 
-        if not os.path.exists(jar_filename):
-            raise ValueError("jar_filename does not exist: %r" % jar_filename)
+        #if not os.path.exists(jar_filename):
+        #    raise ValueError("jar_filename does not exist: %r" % jar_filename)
 
     @staticmethod
     def get_jar_url(version=None):
